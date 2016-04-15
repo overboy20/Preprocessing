@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
@@ -17,12 +18,15 @@ import java.io.File;
 
 public class Controller {
 
-    @FXML protected ImageView originalImage;
+    @FXML public ImageView originalImage;
     @FXML protected ListView<String> listFilters;
+    @FXML protected ListView<String> listOperations;
+    @FXML public VBox vboxParameters;
 
-    protected Mat image;
+    public Mat image;
     //private String originalImagePath;
-    public final ObservableList<String> listItems = FXCollections.observableArrayList();
+    public final ObservableList<String> obsListFilters = FXCollections.observableArrayList();
+    public final ObservableList<String> obsListOperations = FXCollections.observableArrayList();
 
 
     @FXML
@@ -33,9 +37,8 @@ public class Controller {
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
         chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files","*.bmp", "*.png", "*.jpg", "*.gif"));
         File file = chooser.showOpenDialog(new Stage());
+
         if(file != null) {
-
-
             this.image = Highgui.imread(file.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
 
             sample.model.Image.setImageMat(this.image);
@@ -44,7 +47,6 @@ public class Controller {
             Mat newImage = sample.model.Image.getImageMat();
             // show the image
             this.setOriginalImage(newImage);
-
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
@@ -61,11 +63,17 @@ public class Controller {
     }
 
     public void init(){
-        listFilters.setItems(listItems);
-        listItems.add("1111111");
-        listItems.add("222222");
-        listItems.add("3333");
-        listItems.add("44444444444");
-        listItems.add("55555555");
+        listFilters.setItems(obsListFilters);
+        obsListFilters.add("Filter 1");
+        obsListFilters.add("Filter 2");
+        obsListFilters.add("Filter 3");
+        obsListFilters.add("Filter 4");
+        obsListFilters.add("Filter 5");
+
+        listOperations.setItems(obsListOperations);
+        obsListOperations.add("Erode");
+        obsListOperations.add("Dilate");
+        obsListOperations.add("Contrast");
+        obsListOperations.add("Brightness");
     }
 }

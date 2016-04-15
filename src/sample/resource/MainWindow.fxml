@@ -40,7 +40,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="181.0" spacing="5.0" GridPane.columnIndex="2">
+            <VBox fx:id="vboxParameters" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="181.0" spacing="5.0" GridPane.columnIndex="2">
                <children>
                   <TextField maxWidth="1.7976931348623157E308" />
                   <TextField maxWidth="1.7976931348623157E308" />
@@ -59,9 +59,9 @@
                      </content>
                 </TitledPane>
                 <TitledPane animated="false" text="Operations">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
+                     <content>
+                        <ListView fx:id="listOperations" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
                 </TitledPane>
                 <TitledPane animated="false" text="Editor">
                   <content>
