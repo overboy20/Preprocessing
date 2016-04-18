@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -16,22 +17,30 @@ import org.opencv.highgui.Highgui;
 import sample.tools.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class Controller {
 
     @FXML public ImageView originalImage;
+    @FXML public VBox vboxParameters;
     @FXML protected ListView<String> listFilters;
     @FXML protected ListView<String> listOperations;
-    @FXML public VBox vboxParameters;
+    @FXML protected ListView<String> listHistory;
+    @FXML protected Button btSelect;
+    @FXML protected Button btEdit;
+    @FXML protected Button btDelete;
 
     public Mat image;
     //private String originalImagePath;
     public final ObservableList<String> obsListFilters = FXCollections.observableArrayList();
     public final ObservableList<String> obsListOperations = FXCollections.observableArrayList();
+    public final ObservableList<String> obsListHistory = FXCollections.observableArrayList();
+
+    public ArrayList<Mat> changeList = new ArrayList<>();
 
 
-    @FXML
-    public void chooseFile(ActionEvent actionEvent) throws java.io.IOException {
+    @FXML public void chooseFile(ActionEvent actionEvent) throws java.io.IOException {
 
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open File");
@@ -41,6 +50,10 @@ public class Controller {
 
         if(file != null) {
             this.image = Highgui.imread(file.getAbsolutePath(), Highgui.CV_LOAD_IMAGE_COLOR);
+            changeList.clear();
+            obsListHistory.clear();
+            changeList.add(image);
+            obsListHistory.add("Original image");
 
             sample.model.Image.setImageMat(this.image);
 
@@ -64,7 +77,7 @@ public class Controller {
     }
 
     //Filter list handler
-    @FXML public void handleMouseClickFilters(MouseEvent arg0) {
+    @FXML public void handleMouseClickFilters() {
         //System.out.println("clicked on " + listFilters.getSelectionModel().getSelectedItem());
         switch (listFilters.getSelectionModel().getSelectedItem()) {
             case Constants.FILTER_1:
@@ -85,7 +98,7 @@ public class Controller {
     }
 
     //operations list handler
-    @FXML public void handleMouseClickOperations(MouseEvent arg0) {
+    @FXML public void handleMouseClickOperations() {
         //System.out.println("clicked on " + listOperations.getSelectionModel().getSelectedItem());
         switch(listOperations.getSelectionModel().getSelectedItem()) {
             case Constants.OPERATION_1:
@@ -96,6 +109,42 @@ public class Controller {
                 FilterUtil.buildParamContrast(); break;
             case Constants.OPERATION_4:
                 FilterUtil.buildParamBrightness(); break;
+        }
+    }
+
+    @FXML public void handleMouseClickSelect() {
+        int index = listHistory.getSelectionModel().getSelectedIndex();
+        if (index >= 0) {
+            //this.originalImage.setImage(changeList.);
+            setOriginalImage(changeList.get(index));
+            this.image = changeList.get(index);
+        }
+    }
+
+    @FXML public void handleMouseClickEdit() {
+
+    }
+
+    @FXML public void handleMouseClickDelete() {
+        int index = listHistory.getSelectionModel().getSelectedIndex();
+        if (index == 0 && obsListHistory.size() == 1) {
+            changeList.clear();
+            obsListHistory.clear();
+            this.image = new Mat(image.rows(), image.cols(), image.type());
+            setOriginalImage(this.image);
+
+        }
+        else if (index == 0) {
+            this.image = changeList.get(index + 1);
+            setOriginalImage(this.image);
+            changeList.remove(index);
+            obsListHistory.remove(index);
+        }
+        else if (index != -1) {
+            this.image = changeList.get(index - 1);
+            setOriginalImage(this.image);
+            changeList.remove(index);
+            obsListHistory.remove(index);
         }
     }
 
@@ -115,5 +164,7 @@ public class Controller {
         obsListOperations.add(Constants.OPERATION_2);
         obsListOperations.add(Constants.OPERATION_3);
         obsListOperations.add(Constants.OPERATION_4);
+
+        listHistory.setItems(obsListHistory);
     }
 }

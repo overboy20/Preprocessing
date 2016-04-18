@@ -42,20 +42,26 @@ public class FilterUtil {
     private static LinkedHashMap<TextField, String> fields = new LinkedHashMap<>();
 
     public static void buildParamBilateral() {
+        //додавання в структуру полів і їх міток
         fields.put(tfBilateralDiameter = new TextField("20"), "Diameter:");
         fields.put(tfSigmaColor = new TextField("50"), "sigmaColor:");
         fields.put(tfSigmaSpace = new TextField("20"), "sigmaSpace:");
+        //заповнення бокового правого меню
         addFields(fields);
 
+        //встановлення обробника натискання кнопки apply
         btApply.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
+                //виклик відповідної функції openCV
                 result = Filter.bilateralFilter(controller.image,
                         Integer.parseInt(tfBilateralDiameter.getText()),
                         Integer.parseInt(tfSigmaColor.getText()),
                         Integer.parseInt(tfSigmaSpace.getText()));
-                applyFilter(result);
+                //застосування ефекту до нашого зображення
+                applyFilter(result, "Bilateral("+tfBilateralDiameter.getText()+", "+tfSigmaColor.getText()+", "+
+                                                tfSigmaSpace.getText()+")");
             }
         });
     }
@@ -72,7 +78,7 @@ public class FilterUtil {
                 result = Filter.adaptiveBilateralFilter(controller.image,
                         Integer.parseInt(tfSize.getText()),
                         Integer.parseInt(tfSigmaSpace.getText()));
-                applyFilter(result);
+                applyFilter(result, "Ad.Bilateral("+tfSize.getText()+", "+tfSigmaSpace.getText()+")");
             }
         });
     }
@@ -87,7 +93,7 @@ public class FilterUtil {
                 Mat result;
                 result = Filter.blur(controller.image,
                         Integer.parseInt(tfSize.getText()));
-                applyFilter(result);
+                applyFilter(result, "Blur("+tfSize.getText()+")");
             }
         });
     }
@@ -104,7 +110,7 @@ public class FilterUtil {
                 result = Filter.gaussianBlur(controller.image,
                         Integer.parseInt(tfSize.getText()),
                         Double.parseDouble(tfSigmaX.getText()));
-                applyFilter(result);
+                applyFilter(result, "Gaussian("+tfSize.getText()+", "+tfSigmaX.getText()+")");
             }
         });
     }
@@ -119,7 +125,7 @@ public class FilterUtil {
                 Mat result;
                 result = Filter.medianBlur(controller.image,
                         Integer.parseInt(tfSize.getText()));
-                applyFilter(result);
+                applyFilter(result, "Median blur("+tfSize.getText()+")");
             }
         });
     }
@@ -138,7 +144,7 @@ public class FilterUtil {
                         Integer.parseInt(tfSize.getText()),
                         Double.parseDouble(tfScale.getText()),
                         Double.parseDouble(tfDelta.getText()));
-                applyFilter(result);
+                applyFilter(result, "Laplacian("+tfSize.getText()+", "+tfScale.getText()+", "+tfDelta.getText()+")");
             }
         });
     }
@@ -157,7 +163,7 @@ public class FilterUtil {
                         Integer.parseInt(tfDx.getText()),
                         Integer.parseInt(tfDy.getText()),
                         Integer.parseInt(tfSize.getText()));
-                applyFilter(result);
+                applyFilter(result, "Sobel("+tfDx.getText()+", "+tfDy.getText()+", "+tfSize.getText()+")");
 
             }
         });
@@ -173,7 +179,7 @@ public class FilterUtil {
                 Mat result;
                 result = Operations.Erode(controller.image,
                         Integer.parseInt(tfErode.getText()));
-                applyFilter(result);
+                applyFilter(result, "Erode(K Size:"+tfErode.getText()+")");
             }
         });
     }
@@ -188,7 +194,7 @@ public class FilterUtil {
                 Mat result;
                 result = Operations.Dilate(controller.image,
                         Integer.parseInt(tfDilate.getText()));
-                applyFilter(result);
+                applyFilter(result, "Dilate(K size:"+tfDilate.getText()+")");
             }
         });
     }
@@ -213,7 +219,7 @@ public class FilterUtil {
                         Integer.parseInt(tfAlpha.getText()),
                         Integer.parseInt(tfBeta.getText())
                 );
-                applyFilter(result);
+                applyFilter(result, "Brightness("+ tfAlpha.getText()+", "+tfBeta.getText()+")");
             }
         });
     }
@@ -230,11 +236,14 @@ public class FilterUtil {
         fields.clear();
     }
 
-    private static void applyFilter(Mat img) {
+    private static void applyFilter(Mat img, String s) {
         //controller.changesList.add(img);
         //controller.currentImageIndex++;
         //controller.btRedo.setDisable(true);
         //controller.btUndo.setDisable(false);
+        //controller.changeList.put(img, s);
+        controller.changeList.add(img);
+        controller.obsListHistory.add(s);
         controller.image = img;
         controller.originalImage.setImage(ImageOperations.mat2Image(img));
     }
