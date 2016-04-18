@@ -1,6 +1,5 @@
 package sample.Filters;
 
-import javafx.scene.image.Image;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;

@@ -7,8 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.opencv.core.Mat;
+import sample.Filters.Operations;
 import sample.controler.Controller;
 import sample.Filters.Filter;
+
 
 // Даний клас реалізовує заповнення правого меню відповідними компонентами
 // в залежності від вибраного пункту в лівому меню
@@ -19,6 +21,8 @@ public class FilterUtil {
     private static TextField tfSigmaSpace;
     private static TextField tfSigmaX;
     private static TextField tfSize;
+    private static TextField tfErode;
+    private static TextField tfDilate;
     private static Button btApply;
 
     private static Controller controller;
@@ -50,6 +54,54 @@ public class FilterUtil {
         box.getChildren().add(new Label("sigmaSpace:"));
         box.getChildren().add(tfSigmaSpace);
         box.getChildren().add(btApply);
+    }
+
+    public static void buildParamErode(){
+        box.getChildren().clear();
+        tfErode = new TextField("1");
+        btApply = new Button("Apply");
+
+        btApply.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Mat result;
+                result = Operations.Erode(controller.image,
+                        Integer.parseInt(tfErode.getText()));
+                applyFilter(result);
+            }
+        });
+
+        box.getChildren().add(new Label("Kernel size (2n+1):"));
+        box.getChildren().add(tfErode);
+        box.getChildren().add(btApply);
+    }
+
+    public static void buildParamDilate(){
+        box.getChildren().clear();
+        tfDilate = new TextField("1");
+        btApply = new Button("Apply");
+
+        btApply.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Mat result;
+                result = Operations.Dilate(controller.image,
+                        Integer.parseInt(tfDilate.getText()));
+                applyFilter(result);
+            }
+        });
+
+        box.getChildren().add(new Label("Kernel size (2n+1):"));
+        box.getChildren().add(tfDilate);
+        box.getChildren().add(btApply);
+    }
+
+    public static void buildParamContrast() {
+        box.getChildren().clear();
+    }
+
+    public static void buildParamBrightness() {
+        box.getChildren().clear();
     }
 
     public static void buildParamAdBilateral(){
