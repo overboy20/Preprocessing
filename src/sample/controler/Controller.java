@@ -1,14 +1,15 @@
 package sample.controler;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -16,8 +17,13 @@ import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import sample.tools.*;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 
 public class Controller {
@@ -28,11 +34,12 @@ public class Controller {
     @FXML protected ListView<String> listOperations;
     @FXML protected ListView<String> listHistory;
     @FXML protected Button btSelect;
-    @FXML protected Button btEdit;
     @FXML protected Button btDelete;
 
     public Mat image;
-    //private String originalImagePath;
+    private String originalImagePath;
+    private String originalImageExtension;
+    private String originalImageName;
     public final ObservableList<String> obsListFilters = FXCollections.observableArrayList();
     public final ObservableList<String> obsListOperations = FXCollections.observableArrayList();
     public final ObservableList<String> obsListHistory = FXCollections.observableArrayList();
@@ -55,17 +62,49 @@ public class Controller {
             changeList.add(image);
             obsListHistory.add("Original image");
 
-            sample.model.Image.setImageMat(this.image);
+            //sample.model.Image.setImageMat(this.image);
 
-            //originalImagePath = file.getAbsolutePath();
-            Mat newImage = sample.model.Image.getImageMat();
+            originalImagePath = file.getAbsolutePath();
+            originalImageName = file.getName().substring(0, file.getName().length()-4);
+
+            originalImageExtension = originalImagePath.substring(originalImagePath.length()-3);
+            //Mat newImage = sample.model.Image.getImageMat();
             // show the image
-            this.setOriginalImage(newImage);
+            this.setOriginalImage(this.image);
+            System.out.println("Loaded");
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information Dialog");
             alert.setHeaderText("Please Select a File");
             alert.showAndWait();
+            System.out.println("Error loading");
+        }
+    }
+
+    //save to original image
+    @FXML public void saveToFile()throws java.io.IOException {
+        Highgui.imwrite( this.originalImagePath, this.image );
+        System.out.println("Saving");
+    }
+
+    @FXML public void SaveAsNewFile() throws java.io.IOException {
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy_HH.mm.ss");
+        Date date = new Date();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save As...");
+        fileChooser.setInitialFileName(this.originalImageName + "(" + dateFormat.format(date) + ")" +
+                                        "." + this.originalImageExtension);
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file != null) {
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(ImageOperations.mat2Image(this.image),
+                        null), this.originalImageExtension, file);
+                System.out.println("Save as successful");
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -121,10 +160,6 @@ public class Controller {
         }
     }
 
-    @FXML public void handleMouseClickEdit() {
-
-    }
-
     @FXML public void handleMouseClickDelete() {
         int index = listHistory.getSelectionModel().getSelectedIndex();
         if (index == 0 && obsListHistory.size() == 1) {
@@ -146,6 +181,10 @@ public class Controller {
             changeList.remove(index);
             obsListHistory.remove(index);
         }
+    }
+
+    @FXML public void closeApplication(){
+        Platform.exit();
     }
 
     public void init(){
