@@ -17,10 +17,6 @@ public class Filter {
     }
 
     public static Mat adaptiveBilateralFilter(Mat image, int kSize, int sigmaSpace){
-        if (kSize%2 != 1) {
-            kSize -= 1;
-        }
-
         Mat result = new Mat();
         Size s = new Size(kSize, kSize);
         Imgproc.adaptiveBilateralFilter(image, result, s, sigmaSpace);

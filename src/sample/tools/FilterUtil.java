@@ -12,6 +12,7 @@ import java.util.Map;
 import sample.Filters.Operations;
 import sample.controler.Controller;
 import sample.Filters.Filter;
+import sample.tools.InputHandler;
 
 // Даний клас реалізовує заповнення правого меню відповідними компонентами
 // в залежності від вибраного пункту в лівому меню
@@ -54,14 +55,21 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                //виклик відповідної функції openCV
-                result = Filter.bilateralFilter(controller.image,
-                        Integer.parseInt(tfBilateralDiameter.getText()),
-                        Integer.parseInt(tfSigmaColor.getText()),
-                        Integer.parseInt(tfSigmaSpace.getText()));
-                //застосування ефекту до нашого зображення
-                applyFilter(result, "Bilateral("+tfBilateralDiameter.getText()+", "+tfSigmaColor.getText()+", "+
-                                                tfSigmaSpace.getText()+")");
+
+                //обробка коректності введених даних
+                InputHandler n = new InputHandler();
+                Error er = n.checkBilateral(tfBilateralDiameter.getText(), tfSigmaColor.getText(), tfSigmaSpace.getText());
+
+                if (!er.getStatus()) {
+                    //виклик відповідної функції openCV
+                    result = Filter.bilateralFilter(controller.image,
+                            Integer.parseInt(tfBilateralDiameter.getText()),
+                            Integer.parseInt(tfSigmaColor.getText()),
+                            Integer.parseInt(tfSigmaSpace.getText()));
+                    //застосування ефекту до нашого зображення
+                    applyFilter(result, "Bilateral(" + tfBilateralDiameter.getText() + ", " + tfSigmaColor.getText() + ", " +
+                            tfSigmaSpace.getText() + ")");
+                }
             }
         });
     }
@@ -75,10 +83,16 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Filter.adaptiveBilateralFilter(controller.image,
-                        Integer.parseInt(tfSize.getText()),
-                        Integer.parseInt(tfSigmaSpace.getText()));
-                applyFilter(result, "Ad.Bilateral("+tfSize.getText()+", "+tfSigmaSpace.getText()+")");
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkAdaptive(tfSize.getText(), tfSigmaSpace.getText());
+
+                if (!er.getStatus()) {
+                    result = Filter.adaptiveBilateralFilter(controller.image,
+                            Integer.parseInt(tfSize.getText()),
+                            Integer.parseInt(tfSigmaSpace.getText()));
+                    applyFilter(result, "Ad.Bilateral(" + tfSize.getText() + ", " + tfSigmaSpace.getText() + ")");
+                }
             }
         });
     }
@@ -91,9 +105,15 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Filter.blur(controller.image,
-                        Integer.parseInt(tfSize.getText()));
-                applyFilter(result, "Blur("+tfSize.getText()+")");
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkBlur(tfSize.getText());
+
+                if (!er.getStatus()) {
+                    result = Filter.blur(controller.image,
+                            Integer.parseInt(tfSize.getText()));
+                    applyFilter(result, "Blur(" + tfSize.getText() + ")");
+                }
             }
         });
     }
@@ -107,10 +127,16 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Filter.gaussianBlur(controller.image,
-                        Integer.parseInt(tfSize.getText()),
-                        Double.parseDouble(tfSigmaX.getText()));
-                applyFilter(result, "Gaussian("+tfSize.getText()+", "+tfSigmaX.getText()+")");
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkGaussian(tfSize.getText(), tfSigmaX.getText());
+
+                if (!er.getStatus()) {
+                    result = Filter.gaussianBlur(controller.image,
+                            Integer.parseInt(tfSize.getText()),
+                            Double.parseDouble(tfSigmaX.getText()));
+                    applyFilter(result, "Gaussian(" + tfSize.getText() + ", " + tfSigmaX.getText() + ")");
+                }
             }
         });
     }
@@ -123,9 +149,15 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Filter.medianBlur(controller.image,
-                        Integer.parseInt(tfSize.getText()));
-                applyFilter(result, "Median blur("+tfSize.getText()+")");
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkMedian(tfSize.getText());
+
+                if (!er.getStatus()) {
+                    result = Filter.medianBlur(controller.image,
+                            Integer.parseInt(tfSize.getText()));
+                    applyFilter(result, "Median blur(" + tfSize.getText() + ")");
+                }
             }
         });
     }
@@ -140,11 +172,17 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Filter.laplacian(controller.image,
-                        Integer.parseInt(tfSize.getText()),
-                        Double.parseDouble(tfScale.getText()),
-                        Double.parseDouble(tfDelta.getText()));
-                applyFilter(result, "Laplacian("+tfSize.getText()+", "+tfScale.getText()+", "+tfDelta.getText()+")");
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkLaplacian(tfSize.getText(), tfScale.getText(), tfDelta.getText());
+
+                if (!er.getStatus()) {
+                    result = Filter.laplacian(controller.image,
+                            Integer.parseInt(tfSize.getText()),
+                            Double.parseDouble(tfScale.getText()),
+                            Double.parseDouble(tfDelta.getText()));
+                    applyFilter(result, "Laplacian(" + tfSize.getText() + ", " + tfScale.getText() + ", " + tfDelta.getText() + ")");
+                }
             }
         });
     }
@@ -159,12 +197,17 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Filter.sobel(controller.image,
-                        Integer.parseInt(tfDx.getText()),
-                        Integer.parseInt(tfDy.getText()),
-                        Integer.parseInt(tfSize.getText()));
-                applyFilter(result, "Sobel("+tfDx.getText()+", "+tfDy.getText()+", "+tfSize.getText()+")");
 
+                InputHandler n = new InputHandler();
+                Error er = n.checkSobel(tfDx.getText(), tfDy.getText(), tfSize.getText());
+
+                if (!er.getStatus()) {
+                    result = Filter.sobel(controller.image,
+                            Integer.parseInt(tfDx.getText()),
+                            Integer.parseInt(tfDy.getText()),
+                            Integer.parseInt(tfSize.getText()));
+                    applyFilter(result, "Sobel(" + tfDx.getText() + ", " + tfDy.getText() + ", " + tfSize.getText() + ")");
+                }
             }
         });
     }
@@ -177,9 +220,15 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Operations.Erode(controller.image,
-                        Integer.parseInt(tfErode.getText()));
-                applyFilter(result, "Erode(K Size:"+tfErode.getText()+")");
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkErodeDilate(tfErode.getText());
+
+                if (!er.getStatus()) {
+                    result = Operations.Erode(controller.image,
+                            Integer.parseInt(tfErode.getText()));
+                    applyFilter(result, "Erode(K Size:" + tfErode.getText() + ")");
+                }
             }
         });
     }
@@ -192,9 +241,15 @@ public class FilterUtil {
             @Override
             public void handle(ActionEvent event) {
                 Mat result;
-                result = Operations.Dilate(controller.image,
-                        Integer.parseInt(tfDilate.getText()));
-                applyFilter(result, "Dilate(K size:"+tfDilate.getText()+")");
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkErodeDilate(tfDilate.getText());
+
+                if (!er.getStatus()) {
+                    result = Operations.Dilate(controller.image,
+                            Integer.parseInt(tfDilate.getText()));
+                    applyFilter(result, "Dilate(K size:" + tfDilate.getText() + ")");
+                }
             }
         });
     }
@@ -237,11 +292,6 @@ public class FilterUtil {
     }
 
     private static void applyFilter(Mat img, String s) {
-        //controller.changesList.add(img);
-        //controller.currentImageIndex++;
-        //controller.btRedo.setDisable(true);
-        //controller.btUndo.setDisable(false);
-        //controller.changeList.put(img, s);
         controller.changeList.add(img);
         controller.obsListHistory.add(s);
         controller.image = img;
