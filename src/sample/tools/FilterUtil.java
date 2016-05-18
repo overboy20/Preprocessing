@@ -6,13 +6,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import org.opencv.core.Mat;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import sample.Filters.Filter;
 import sample.Filters.Operations;
 import sample.controler.Controller;
-import sample.Filters.Filter;
-import sample.tools.InputHandler;
+import org.opencv.core.Mat;
+import sample.tools.Error;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 // Даний клас реалізовує заповнення правого меню відповідними компонентами
 // в залежності від вибраного пункту в лівому меню

@@ -1,15 +1,15 @@
 package sample.tools;
 
 
+
 public class InputHandler {
 
     private final String e01 = "Input values must be integer!";
     private final String e02 = "d must be > 0!";
     private final String e03 = "K size must be positive and odd!";
     private final String e04 = "Input value must be > 0!";
-    private final String e05 = "K size must be positive and odd!";
-    private final String e06 = "Delta must be positive!";
-    private final String e07 = "Values must be positive!";
+    private final String e05 = "Delta must be positive!";
+    private final String e06 = "Values must be positive!";
 
 
     public Error checkBilateral(String d, String sigmaColor, String sigmaSpace) {
@@ -85,7 +85,7 @@ public class InputHandler {
             int s = Integer.parseInt(scale);
             int d = Integer.parseInt(delta);
             if (ks <= 0 || ks%2 != 1) return new Error(e03);
-            if (d <= 0) return new Error(e06);
+            if (d <= 0) return new Error(e05);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -99,7 +99,7 @@ public class InputHandler {
             int x = Integer.parseInt(dx);
             int y = Integer.parseInt(dy);
             int ks = Integer.parseInt(ksize);
-            if (ks <= 0 || ks%2 != 1 || x <= 0 || y <= 0) return new Error(e07);
+            if (ks <= 0 || ks%2 != 1 || x <= 0 || y <= 0) return new Error(e06);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -111,7 +111,7 @@ public class InputHandler {
     public Error checkErodeDilate(String ksize) {
         try {
             int k = Integer.parseInt(ksize);
-            if (k <= 0) return new Error(e07);
+            if (k <= 0) return new Error(e06);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -24,7 +26,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 
 public class Controller {
 
@@ -36,6 +37,7 @@ public class Controller {
     @FXML protected Button btSelect;
     @FXML protected Button btDelete;
 
+
     public Mat image;
     private String originalImagePath;
     private String originalImageExtension;
@@ -43,9 +45,9 @@ public class Controller {
     public final ObservableList<String> obsListFilters = FXCollections.observableArrayList();
     public final ObservableList<String> obsListOperations = FXCollections.observableArrayList();
     public final ObservableList<String> obsListHistory = FXCollections.observableArrayList();
+    private Stage stage;
 
     public ArrayList<Mat> changeList = new ArrayList<>();
-
 
     @FXML public void chooseFile(ActionEvent actionEvent) throws java.io.IOException {
 
@@ -62,15 +64,18 @@ public class Controller {
             changeList.add(image);
             obsListHistory.add("Original image");
 
-            //sample.model.Image.setImageMat(this.image);
+            //Image.setImageMat(this.image);
 
             originalImagePath = file.getAbsolutePath();
             originalImageName = file.getName().substring(0, file.getName().length()-4);
 
             originalImageExtension = originalImagePath.substring(originalImagePath.length()-3);
-            //Mat newImage = sample.model.Image.getImageMat();
+            //Mat newImage = Image.getImageMat();
             // show the image
             this.setOriginalImage(this.image);
+            //maxX = this.originalImage.getImage().getWidth();
+            //maxY = this.originalImage.getImage().getHeight();
+
             System.out.println("Loaded");
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -110,9 +115,11 @@ public class Controller {
 
     private void setOriginalImage(Mat dst) {
         this.originalImage.setImage(ImageOperations.mat2Image(dst));
-        this.originalImage.setFitWidth(450.0);
-        this.originalImage.setFitHeight(450.0);
+        this.originalImage.setFitWidth(656);
         this.originalImage.setPreserveRatio(true);
+        //double fitW = originalImage.getBoundsInParent().getWidth();
+        //double fitH = originalImage.getBoundsInParent().getHeight();
+        //System.out.println(fitW + "/" + fitH);
     }
 
     //Filter list handler
@@ -183,11 +190,62 @@ public class Controller {
         }
     }
 
+    @FXML public void handleDrawPressed() {
+        /*Canvas drawArea = new Canvas(500,500);
+        GraphicsContext gc;
+        gc = drawArea.getGraphicsContext2D();
+        drawArea.setOnMouseDragged(event -> gc.fillRect(event.getX(), event.getY(), 5, 5));*/
+        //originalImage.setonm
+        //this.originalImage.set
+    }
+
+    @FXML public void handleDrawDragged(){
+
+    }
+
+    @FXML public void handleOpenEditor()throws Exception {
+        Stage editor = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/EditorWindow.fxml"));
+        VBox root = loader.load();
+        Scene scene = new Scene(root);
+        editor.setScene(scene);
+        editor.setResizable(false);
+        editor.show();
+        EditorController controller = loader.getController();
+        editor.setTitle("Editor");
+        controller.init(originalImage);
+    }
+
     @FXML public void closeApplication(){
         Platform.exit();
     }
 
-    public void init(){
+    /*@FXML public void handlePenClicked() {
+        tool = Tool.PEN;
+    }
+
+    @FXML public void handleBrushClicked() {
+        tool = Tool.BRUSH;
+    }
+
+    @FXML public void handleLineClicked() {
+        tool = Tool.LINE;
+    }
+
+    @FXML public void handleRectangleClicked() {
+        tool = Tool.RECTANGLE;
+    }
+
+    @FXML public void handleEllipseClicked() {
+        tool = Tool.ELLIPSE;
+    }
+
+    @FXML public void handleFillClicked() {
+        tool = Tool.FILL;
+    }*/
+
+    public void init(Stage s) {
+        this.stage = s;
         FilterUtil.setController(this);
         listFilters.setItems(obsListFilters);
         obsListFilters.add(Constants.FILTER_1);
@@ -205,5 +263,8 @@ public class Controller {
         obsListOperations.add(Constants.OPERATION_4);
 
         listHistory.setItems(obsListHistory);
+
+
     }
+
 }

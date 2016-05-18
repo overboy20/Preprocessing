@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Operations {
 
-    /*public static Mat contrast (Mat image, Integer a){
+    public static Mat contrast (Mat image, Integer a){
 
         Mat hsvImg = new Mat();
         List<Mat> hsvPlanes = new ArrayList<>();
@@ -25,13 +25,7 @@ public class Operations {
         Core.split(hsvImg, hsvPlanes);
 
         // get the average hue value of the image
-        double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
-
-        if(Estimate.getFirstHistAverageValue() == null) {// debug
-            Estimate.setFirstHistAverageValue(threshValue);
-            System.out.println("Value before " + Estimate.getFirstHistAverageValue());
-        }
-
+        //double threshValue = PreProcessingOperation.getHistAverage(hsvImg, hsvPlanes.get(0));
 
         Scalar modifier;
 
@@ -40,7 +34,7 @@ public class Operations {
         modifier = new Scalar(1.1,1.1,1.1,1);
         Core.multiply(image, modifier, image);
         return image;
-    }*/
+    }
 
     public static Mat bright(Mat image, int sz){
 
