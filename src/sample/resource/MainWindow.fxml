@@ -6,79 +6,85 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="vbMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="836.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controler.Controller">
-   <children>
+<VBox fx:id="vbMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="828.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controler.Controller">
+    <children>
 
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-                  <MenuItem fx:id="miOpen" mnemonicParsing="false" onAction="#chooseFile" text="Open..." />
-                  <MenuItem mnemonicParsing="false" onAction="#SaveAsNewFile" text="Save as..." />
-                  <MenuItem mnemonicParsing="false" onAction="#saveToFile" text="Save" />
-              <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <GridPane prefHeight="588.0" prefWidth="836.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="164.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="500.0" prefWidth="500.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Accordion maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="549.0" prefWidth="134.0">
-              <panes>
-                <TitledPane animated="false" text="Filter">
-                     <content>
-                        <ListView fx:id="listFilters" onMouseClicked="#handleMouseClickFilters" prefHeight="200.0" prefWidth="200.0" />
-                     </content>
-                </TitledPane>
-                <TitledPane animated="false" text="Operations">
-                     <content>
-                        <ListView fx:id="listOperations" onMouseClicked="#handleMouseClickOperations" prefHeight="200.0" prefWidth="200.0" />
-                     </content>
-                </TitledPane>
-                <TitledPane animated="false" text="Editor">
-                     <content>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Button mnemonicParsing="false" onMouseClicked="#handleOpenEditor" text="Open the editor" />
-                           </children>
-                        </VBox>
-                     </content>
-                </TitledPane>
-                  <TitledPane animated="false" text="History">
-                     <content>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <ListView fx:id="listHistory" prefHeight="290.0" prefWidth="135.0" />
-                              <Button fx:id="btSelect" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#handleMouseClickSelect" text="Select">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="btDelete" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#handleMouseClickDelete" text="Delete" />
-                           </children>
-                        </VBox>
-                     </content>
-                  </TitledPane>
-              </panes>
-            </Accordion>
-            <ImageView fx:id="originalImage" fitWidth="656.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="TOP">
-               <GridPane.margin>
-                  <Insets left="10.0" top="10.0" />
-               </GridPane.margin>
-            </ImageView>
-         </children>
-      </GridPane>
-   </children>
+        <MenuBar>
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="miOpen" mnemonicParsing="false" onAction="#chooseFile" text="Open..." />
+                        <MenuItem mnemonicParsing="false" onAction="#SaveAsNewFile" text="Save as..." />
+                        <MenuItem mnemonicParsing="false" onAction="#saveToFile" text="Save" />
+                        <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <GridPane prefHeight="558.0" prefWidth="793.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="164.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="500.0" prefWidth="500.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="50.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <VBox fx:id="vboxParameters" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="149.0" spacing="5.0" GridPane.columnIndex="2">
+                    <padding>
+                        <Insets left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </VBox>
+                <Accordion maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="549.0" prefWidth="134.0">
+                    <panes>
+                        <TitledPane animated="false" text="Filter">
+                            <content>
+                                <ListView fx:id="listFilters" onMouseClicked="#handleMouseClickFilters" prefHeight="200.0" prefWidth="200.0" />
+                            </content>
+                        </TitledPane>
+                        <TitledPane animated="false" text="Operations">
+                            <content>
+                                <ListView fx:id="listOperations" onMouseClicked="#handleMouseClickOperations" prefHeight="200.0" prefWidth="200.0" />
+                            </content>
+                        </TitledPane>
+                        <TitledPane animated="false" text="Editor">
+                            <content>
+                                <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" onMouseClicked="#handleOpenEditor" text="Open the editor" />
+                                    </children>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+                        <TitledPane animated="false" text="History">
+                            <content>
+                                <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                        <ListView fx:id="listHistory" prefHeight="290.0" prefWidth="135.0" />
+                                        <Button fx:id="btSelect" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#handleMouseClickSelect" text="Select">
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button fx:id="btDelete" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#handleMouseClickDelete" text="Delete" />
+                                    </children>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+                <ImageView fx:id="originalImage" fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                    <GridPane.margin>
+                        <Insets left="10.0" top="10.0" />
+                    </GridPane.margin>
+                </ImageView>
+            </children>
+        </GridPane>
+    </children>
 </VBox>

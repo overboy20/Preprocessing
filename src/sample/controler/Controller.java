@@ -113,7 +113,7 @@ public class Controller {
 
     private void setOriginalImage(Mat dst) {
         this.originalImage.setImage(ImageOperations.mat2Image(dst));
-        this.originalImage.setFitWidth(656);
+        this.originalImage.setFitWidth(500);
         this.originalImage.setPreserveRatio(true);
     }
 

@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
@@ -17,6 +18,8 @@ public class EditorController {
     @FXML public Canvas myCanvas;
     @FXML public ColorPicker colorPicker;
     @FXML public ComboBox cbLineWidth;
+    @FXML public CheckBox checkboxFill;
+    @FXML public ColorPicker colorFill;
 
     private GraphicsContext graphicsContext;
 
@@ -24,6 +27,7 @@ public class EditorController {
     Tool tool = Tool.PEN;
 
     double initX, initY, maxX, maxY, endX, endY;
+    boolean fill;
 
     @FXML public void handlePenClicked() {
         tool = Tool.PEN;
@@ -52,11 +56,13 @@ public class EditorController {
     private void initDraw(){
         graphicsContext.setStroke(colorPicker.getValue());
         graphicsContext.setLineWidth(cbLineWidth.getSelectionModel().getSelectedIndex()+1);
+        graphicsContext.setFill(colorFill.getValue());
     }
 
     //ініціалізація класу контроллера
     public void init(ImageView i){
         Image im = i.getImage();
+        fill = false;
         //висота і ширина канвасу
         double fitW = i.getBoundsInParent().getWidth();
         double fitH = i.getBoundsInParent().getHeight();
@@ -64,9 +70,13 @@ public class EditorController {
         maxY = fitH;
 
         graphicsContext = myCanvas.getGraphicsContext2D();
-        myCanvas.setWidth(fitW);
-        myCanvas.setHeight(fitH);
-        graphicsContext.drawImage(im, 0, 0, fitW, fitH);
+        //myCanvas.setWidth(fitW);
+        //myCanvas.setHeight(fitH);
+
+        myCanvas.setWidth(650);
+        myCanvas.setHeight(fitH * 650 / fitW);
+
+        graphicsContext.drawImage(im, 0, 0, myCanvas.getWidth(), myCanvas.getHeight());
 
         //подія для натискання кнопки миші
         myCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
@@ -94,26 +104,39 @@ public class EditorController {
                 new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent event) {
+                        endX = event.getX();
+                        endY = event.getY();
+                        graphicsContext.beginPath();
+                        graphicsContext.moveTo(initX, initY);
+
                         if (tool == Tool.LINE) {
-                            endX = event.getX();
-                            endY = event.getY();
-                            graphicsContext.beginPath();
-                            graphicsContext.moveTo(initX, initY);
                             graphicsContext.lineTo(endX, endY);
-                            graphicsContext.stroke();
                         }
                         else if (tool == Tool.RECTANGLE) {
-
+                            if (!fill)
+                                graphicsContext.rect(initX, initY, endX-initX, endY-initY);
+                            else graphicsContext.fillRect(initX, initY, endX-initX, endY-initY);
                         }
                         else if (tool == Tool.ELLIPSE) {
-
+                            if (!fill)
+                                graphicsContext.strokeOval(initX, initY, endX-initX, endY-initY);
+                            else graphicsContext.fillOval(initX, initY, endX-initX, endY-initY);
                         }
+                        graphicsContext.stroke();
                     }
                 });
 
         //повторна ініціалізація параметрів малювання після зміни кольору і товщини лінії
         colorPicker.setOnAction(event -> initDraw());
         cbLineWidth.setOnAction(event -> initDraw());
+
+        checkboxFill.setOnAction(event -> {
+            fill = !fill;
+            colorFill.setDisable(!fill);
+            initDraw();
+        });
+
+        colorFill.setOnAction(event -> initDraw());
 
         //додавання у випадаючий список допустимих значень ширини лінії
         ObservableList<String> obs = FXCollections.observableArrayList();

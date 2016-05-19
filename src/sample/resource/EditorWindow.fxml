@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="722.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controler.EditorController">
+<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="689.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controler.EditorController">
    <children>
       <MenuBar>
         <menus>
@@ -41,7 +41,13 @@
                   <Insets top="5.0" />
                </HBox.margin>
             </Label>
-            <ComboBox fx:id="cbLineWidth" prefHeight="25.0" prefWidth="46.0" />
+            <ComboBox fx:id="cbLineWidth" prefHeight="25.0" prefWidth="62.0" />
+            <CheckBox fx:id="checkboxFill" mnemonicParsing="false" text="Fill">
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
+            </CheckBox>
+            <ColorPicker fx:id="colorFill" disable="true" prefHeight="25.0" prefWidth="91.0" />
          </children>
          <VBox.margin>
             <Insets />
