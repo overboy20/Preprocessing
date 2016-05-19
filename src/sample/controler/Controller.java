@@ -37,7 +37,6 @@ public class Controller {
     @FXML protected Button btSelect;
     @FXML protected Button btDelete;
 
-
     public Mat image;
     private String originalImagePath;
     private String originalImageExtension;
@@ -45,7 +44,6 @@ public class Controller {
     public final ObservableList<String> obsListFilters = FXCollections.observableArrayList();
     public final ObservableList<String> obsListOperations = FXCollections.observableArrayList();
     public final ObservableList<String> obsListHistory = FXCollections.observableArrayList();
-    private Stage stage;
 
     public ArrayList<Mat> changeList = new ArrayList<>();
 
@@ -117,14 +115,10 @@ public class Controller {
         this.originalImage.setImage(ImageOperations.mat2Image(dst));
         this.originalImage.setFitWidth(656);
         this.originalImage.setPreserveRatio(true);
-        //double fitW = originalImage.getBoundsInParent().getWidth();
-        //double fitH = originalImage.getBoundsInParent().getHeight();
-        //System.out.println(fitW + "/" + fitH);
     }
 
     //Filter list handler
     @FXML public void handleMouseClickFilters() {
-        //System.out.println("clicked on " + listFilters.getSelectionModel().getSelectedItem());
         switch (listFilters.getSelectionModel().getSelectedItem()) {
             case Constants.FILTER_1:
                 FilterUtil.buildParamBilateral(); break;
@@ -145,7 +139,6 @@ public class Controller {
 
     //operations list handler
     @FXML public void handleMouseClickOperations() {
-        //System.out.println("clicked on " + listOperations.getSelectionModel().getSelectedItem());
         switch(listOperations.getSelectionModel().getSelectedItem()) {
             case Constants.OPERATION_1:
                 FilterUtil.buildParamErode(); break;
@@ -158,15 +151,16 @@ public class Controller {
         }
     }
 
+    //Натискання кнопки вибору пункту в історії змін
     @FXML public void handleMouseClickSelect() {
         int index = listHistory.getSelectionModel().getSelectedIndex();
         if (index >= 0) {
-            //this.originalImage.setImage(changeList.);
             setOriginalImage(changeList.get(index));
             this.image = changeList.get(index);
         }
     }
 
+    //Видалення пункту зі списку історії
     @FXML public void handleMouseClickDelete() {
         int index = listHistory.getSelectionModel().getSelectedIndex();
         if (index == 0 && obsListHistory.size() == 1) {
@@ -174,7 +168,6 @@ public class Controller {
             obsListHistory.clear();
             this.image = new Mat(image.rows(), image.cols(), image.type());
             setOriginalImage(this.image);
-
         }
         else if (index == 0) {
             this.image = changeList.get(index + 1);
@@ -190,19 +183,7 @@ public class Controller {
         }
     }
 
-    @FXML public void handleDrawPressed() {
-        /*Canvas drawArea = new Canvas(500,500);
-        GraphicsContext gc;
-        gc = drawArea.getGraphicsContext2D();
-        drawArea.setOnMouseDragged(event -> gc.fillRect(event.getX(), event.getY(), 5, 5));*/
-        //originalImage.setonm
-        //this.originalImage.set
-    }
-
-    @FXML public void handleDrawDragged(){
-
-    }
-
+    //відкриття вікна редактора
     @FXML public void handleOpenEditor()throws Exception {
         Stage editor = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/EditorWindow.fxml"));
@@ -220,32 +201,7 @@ public class Controller {
         Platform.exit();
     }
 
-    /*@FXML public void handlePenClicked() {
-        tool = Tool.PEN;
-    }
-
-    @FXML public void handleBrushClicked() {
-        tool = Tool.BRUSH;
-    }
-
-    @FXML public void handleLineClicked() {
-        tool = Tool.LINE;
-    }
-
-    @FXML public void handleRectangleClicked() {
-        tool = Tool.RECTANGLE;
-    }
-
-    @FXML public void handleEllipseClicked() {
-        tool = Tool.ELLIPSE;
-    }
-
-    @FXML public void handleFillClicked() {
-        tool = Tool.FILL;
-    }*/
-
-    public void init(Stage s) {
-        this.stage = s;
+    public void init() {
         FilterUtil.setController(this);
         listFilters.setItems(obsListFilters);
         obsListFilters.add(Constants.FILTER_1);
@@ -263,8 +219,5 @@ public class Controller {
         obsListOperations.add(Constants.OPERATION_4);
 
         listHistory.setItems(obsListHistory);
-
-
     }
-
 }

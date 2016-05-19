@@ -21,8 +21,7 @@ public class Main extends Application {
 
         Controller controller = loader.getController();
         //controller.setStage(this.primaryStage);
-        controller.init(primaryStage);
-
+        controller.init();
     }
 
     public static void main(String[] args) {

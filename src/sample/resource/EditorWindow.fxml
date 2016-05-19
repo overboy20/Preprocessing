@@ -27,7 +27,6 @@
       <HBox prefHeight="29.0" prefWidth="674.0" spacing="5.0">
          <children>
             <Button mnemonicParsing="false" onMouseClicked="#handlePenClicked" text="pen" />
-            <Button mnemonicParsing="false" onMouseClicked="#handleBrushClicked" text="brush" />
             <Button mnemonicParsing="false" onMouseClicked="#handleLineClicked" text="line" />
             <Button mnemonicParsing="false" onMouseClicked="#handleRectangleClicked" text="rectangle" />
             <Button mnemonicParsing="false" onMouseClicked="#handleEllipseClicked" text="ellipse" />

@@ -73,7 +73,7 @@
                   </TitledPane>
               </panes>
             </Accordion>
-            <ImageView fx:id="originalImage" fitWidth="656.0" onMouseDragged="#handleDrawPressed" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="TOP">
+            <ImageView fx:id="originalImage" fitWidth="656.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="TOP">
                <GridPane.margin>
                   <Insets left="10.0" top="10.0" />
                </GridPane.margin>
