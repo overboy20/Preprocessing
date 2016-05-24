@@ -10,7 +10,6 @@ import sample.Filters.Filter;
 import sample.Filters.Operations;
 import sample.controler.Controller;
 import org.opencv.core.Mat;
-import sample.tools.Error;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

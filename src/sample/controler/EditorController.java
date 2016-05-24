@@ -6,12 +6,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 
 public class EditorController {
 
@@ -28,6 +33,8 @@ public class EditorController {
 
     double initX, initY, maxX, maxY, endX, endY;
     boolean fill;
+    public Controller mainController;
+
 
     @FXML public void handlePenClicked() {
         tool = Tool.PEN;
@@ -60,7 +67,9 @@ public class EditorController {
     }
 
     //ініціалізація класу контроллера
-    public void init(ImageView i){
+    public void init(Controller c){
+        ImageView i = c.originalImage;
+        mainController = c;
         Image im = i.getImage();
         fill = false;
         //висота і ширина канвасу
@@ -115,12 +124,20 @@ public class EditorController {
                         else if (tool == Tool.RECTANGLE) {
                             if (!fill)
                                 graphicsContext.rect(initX, initY, endX-initX, endY-initY);
-                            else graphicsContext.fillRect(initX, initY, endX-initX, endY-initY);
+                            else {
+                                graphicsContext.fillRect(initX, initY, endX-initX, endY-initY);
+                                //рамка
+                                graphicsContext.rect(initX, initY, endX-initX, endY-initY);
+                            }
                         }
                         else if (tool == Tool.ELLIPSE) {
                             if (!fill)
                                 graphicsContext.strokeOval(initX, initY, endX-initX, endY-initY);
-                            else graphicsContext.fillOval(initX, initY, endX-initX, endY-initY);
+                            else {
+                                graphicsContext.fillOval(initX, initY, endX-initX, endY-initY);
+                                //рамка
+                                graphicsContext.strokeOval(initX, initY, endX-initX, endY-initY);
+                            }
                         }
                         graphicsContext.stroke();
                     }
@@ -130,6 +147,7 @@ public class EditorController {
         colorPicker.setOnAction(event -> initDraw());
         cbLineWidth.setOnAction(event -> initDraw());
 
+        //подія, яка виникаж при зміні пункту "заливка"
         checkboxFill.setOnAction(event -> {
             fill = !fill;
             colorFill.setDisable(!fill);
@@ -143,5 +161,51 @@ public class EditorController {
         for (int j = 1; j <= 10; j++) obs.add(Integer.toString(j));
         cbLineWidth.setItems(obs);
         cbLineWidth.getSelectionModel().select(0);
+    }
+
+    //закриття редактора
+    @FXML public void onClose(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Answer");
+        alert.setHeaderText("Are you really want to close editor?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            Stage stage = (Stage) myCanvas.getScene().getWindow();
+            stage.close();
+        }
+        else {
+            alert.close();
+        }
+    }
+
+    @FXML public void saveImage(){
+        Alert alertSave = new Alert(Alert.AlertType.CONFIRMATION);
+        alertSave.setTitle("Answer");
+        alertSave.setHeaderText("Save changes?");
+        alertSave.showAndWait();
+        if (alertSave.getResult() == ButtonType.OK) {
+            WritableImage i = new WritableImage((int)myCanvas.getWidth(), (int)myCanvas.getHeight());
+            myCanvas.snapshot(null, i);
+
+            /*BufferedImage bi = SwingFXUtils.fromFXImage(i, null);
+
+            Mat im = bufferedImageToMat(bi);
+            mainController.changeList.add(im);
+            mainController.image = im;*/
+            //mainController.obsListHistory.add("Image editor");
+            mainController.originalImage.setImage(i);
+            Stage stage = (Stage) myCanvas.getScene().getWindow();
+            stage.close();
+        }
+        else {
+            alertSave.close();
+        }
+    }
+
+    private Mat bufferedImageToMat(BufferedImage bi) {
+        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+        mat.put(0, 0, data);
+        return mat;
     }
 }

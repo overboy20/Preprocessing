@@ -194,7 +194,7 @@ public class Controller {
         editor.show();
         EditorController controller = loader.getController();
         editor.setTitle("Editor");
-        controller.init(originalImage);
+        controller.init(this);
     }
 
     @FXML public void closeApplication(){
