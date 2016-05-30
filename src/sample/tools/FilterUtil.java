@@ -1,5 +1,6 @@
 package sample.tools;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import sample.Filters.Operations;
 import sample.controler.Controller;
 import org.opencv.core.Mat;
 
+import java.awt.image.BufferedImage;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -296,6 +298,8 @@ public class FilterUtil {
         controller.obsListHistory.add(s);
         controller.image = img;
         controller.originalImage.setImage(ImageOperations.mat2Image(img));
+
+        controller.setPSNR(img);
     }
 
     public static void setController(Controller c){

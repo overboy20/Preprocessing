@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -20,6 +21,7 @@ import org.opencv.highgui.Highgui;
 import sample.tools.*;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -36,6 +38,7 @@ public class Controller {
     @FXML protected ListView<String> listHistory;
     @FXML protected Button btSelect;
     @FXML protected Button btDelete;
+    @FXML protected Label labelPSNR;
 
     public Mat image;
     private String originalImagePath;
@@ -157,6 +160,7 @@ public class Controller {
         if (index >= 0) {
             setOriginalImage(changeList.get(index));
             this.image = changeList.get(index);
+            setPSNR(this.image);
         }
     }
 
@@ -172,12 +176,14 @@ public class Controller {
         else if (index == 0) {
             this.image = changeList.get(index + 1);
             setOriginalImage(this.image);
+            setPSNR(this.image);
             changeList.remove(index);
             obsListHistory.remove(index);
         }
         else if (index != -1) {
             this.image = changeList.get(index - 1);
             setOriginalImage(this.image);
+            setPSNR(this.image);
             changeList.remove(index);
             obsListHistory.remove(index);
         }
@@ -199,6 +205,17 @@ public class Controller {
 
     @FXML public void closeApplication(){
         Platform.exit();
+    }
+
+    //обрахунок пікового відношення сигналу до шуму
+    //рахується відношення сигналу до шуму для поточного зображення, яке було відфільтроване,
+    //відносно першого зображення в списку історії
+    public void setPSNR(Mat img){
+        BufferedImage image1 = SwingFXUtils.fromFXImage(ImageOperations.mat2Image(changeList.get(0)), null);
+        BufferedImage image2 = SwingFXUtils.fromFXImage(ImageOperations.mat2Image(img), null);
+
+        double psnr = PSNR.getPsnr( PSNR.getmeanSquaredError(image1, image2) );
+        labelPSNR.setText("PSNR: "+Double.toString(psnr));
     }
 
     public void init() {

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="vbMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="828.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controler.Controller">
+<VBox fx:id="vbMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="828.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controler.Controller">
     <children>
 
         <MenuBar>
@@ -86,5 +86,10 @@
                 </ImageView>
             </children>
         </GridPane>
+      <Pane prefHeight="46.0" prefWidth="828.0">
+         <children>
+            <Label fx:id="labelPSNR" layoutX="14.0" layoutY="18.0" text="PSNR" />
+         </children>
+      </Pane>
     </children>
 </VBox>
