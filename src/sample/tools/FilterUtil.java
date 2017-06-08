@@ -1,6 +1,5 @@
 package sample.tools;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -12,9 +11,9 @@ import sample.Filters.Operations;
 import sample.controler.Controller;
 import org.opencv.core.Mat;
 
-import java.awt.image.BufferedImage;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.DoubleAccumulator;
 
 // Даний клас реалізовує заповнення правого меню відповідними компонентами
 // в залежності від вибраного пункту в лівому меню
@@ -35,6 +34,16 @@ public class FilterUtil {
     //brightness
     private static TextField tfAlpha;
     private static TextField tfBeta;
+
+    //treshold
+    private static TextField tfValue;
+    private static TextField tfType;
+
+    //gabor kernel
+    private static TextField tfKsize;
+    private static TextField tfLambda;
+    private static TextField tfSigma;
+    private static TextField tfTheta;
 
     private static Button btApply;
     private static Controller controller;
@@ -257,8 +266,23 @@ public class FilterUtil {
     }
 
     public static void buildParamContrast() {
-        box.getChildren().clear();
+        fields.put(tfAlpha = new TextField("1.1"), "Value:");
+        addFields(fields);
 
+        btApply.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Mat result;
+
+                InputHandler n = new InputHandler();
+                Error er = n.checkContrast(tfAlpha.getText());
+
+                if (!er.getStatus()) {
+                    result = Operations.contrast(controller.image, Double.parseDouble(tfAlpha.getText()));
+                    applyFilter(result, "Contrast(" + tfAlpha.getText() + ")");
+                }
+            }
+        });
     }
 
     public static void buildParamBrightness() {
@@ -277,6 +301,44 @@ public class FilterUtil {
                         Integer.parseInt(tfBeta.getText())
                 );
                 applyFilter(result, "Brightness("+ tfAlpha.getText()+", "+tfBeta.getText()+")");
+            }
+        });
+    }
+
+    public static void buildParamTresholding() {
+        fields.put(tfValue = new TextField("1"), "Value");
+        fields.put(tfType = new TextField("1"), "Type");
+        addFields(fields);
+
+        btApply.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Mat result;
+
+                result = Operations.Treshold(controller.image, Double.parseDouble(tfValue.getText()), Integer.parseInt(tfType.getText()));
+
+                applyFilter(result, "Tresholding (Value:" + tfValue.getText() + ")");
+            }
+        });
+    }
+
+    public static void buildParamGaborKernel() {
+        fields.put(tfKsize = new TextField("5"), "Ksize");
+        fields.put(tfLambda = new TextField("5"), "Sigma");
+        fields.put(tfSigma = new TextField("10"), "Lambda");
+        fields.put(tfTheta = new TextField("180"), "Theta");
+        addFields(fields);
+
+        btApply.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Mat result;
+
+                result = Operations.gaborKernel(controller.image, Integer.parseInt(tfKsize.getText()),
+                        Double.parseDouble(tfLambda.getText()), Double.parseDouble(tfSigma.getText()),
+                        Double.parseDouble(tfTheta.getText()));
+                applyFilter(result, "Gabor Kernel (" + tfKsize.getText() + ", " + tfLambda.getText() + ", " +
+                        tfSigma.getText() + ", " + tfTheta.getText() + ", " + ")");
             }
         });
     }

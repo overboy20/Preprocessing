@@ -10,6 +10,7 @@ public class InputHandler {
     private final String e04 = "Input value must be > 0!";
     private final String e05 = "Delta must be positive!";
     private final String e06 = "Values must be positive!";
+    private final String e07 = "Value must be double and bigger than 1!";
 
 
     public Error checkBilateral(String d, String sigmaColor, String sigmaSpace) {
@@ -116,6 +117,17 @@ public class InputHandler {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new Error(e01);
+        }
+        return new Error();
+    }
+
+    public Error checkContrast(String value){
+        try {
+            double v = Double.parseDouble(value);
+            if (v < 1) return new Error(e07);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new Error(e07);
         }
         return new Error();
     }

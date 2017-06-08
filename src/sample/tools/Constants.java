@@ -14,4 +14,6 @@ public class Constants {
     public static final String OPERATION_2 = "Dilation";
     public static final String OPERATION_3 = "Contrast";
     public static final String OPERATION_4 = "Brightness";
+    public static final String OPERATION_5 = "Tresholding";
+    public static final String OPERATION_6 = "Gabor Kernel";
 }

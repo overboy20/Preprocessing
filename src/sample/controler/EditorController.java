@@ -35,7 +35,6 @@ public class EditorController {
     boolean fill;
     public Controller mainController;
 
-
     @FXML public void handlePenClicked() {
         tool = Tool.PEN;
     }

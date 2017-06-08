@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
+import sample.Filters.Filter;
 import sample.tools.*;
 
 import javax.imageio.ImageIO;
@@ -151,6 +152,10 @@ public class Controller {
                 FilterUtil.buildParamContrast(); break;
             case Constants.OPERATION_4:
                 FilterUtil.buildParamBrightness(); break;
+            case Constants.OPERATION_5:
+                FilterUtil.buildParamTresholding(); break;
+            case Constants.OPERATION_6:
+                FilterUtil.buildParamGaborKernel(); break;
         }
     }
 
@@ -234,6 +239,8 @@ public class Controller {
         obsListOperations.add(Constants.OPERATION_2);
         obsListOperations.add(Constants.OPERATION_3);
         obsListOperations.add(Constants.OPERATION_4);
+        obsListOperations.add(Constants.OPERATION_5);
+        obsListOperations.add(Constants.OPERATION_6);
 
         listHistory.setItems(obsListHistory);
     }
